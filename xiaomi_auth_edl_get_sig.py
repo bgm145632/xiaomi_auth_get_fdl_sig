@@ -147,7 +147,6 @@ class XiaomiUnlockTool:
             print(f"{cr}解析解锁服务响应失败{cres}")
             return False
         
-        print(f"{cy}解锁服务响应: {cb}{json.dumps(unlock_data, indent=2, ensure_ascii=False)}{cres}")
         if unlock_data.get("code") != 0:
             error_msg = unlock_data.get("desc", "未知错误")
             print(f"{cr}解锁服务返回错误: {error_msg}{cres}")
@@ -173,15 +172,11 @@ class XiaomiUnlockTool:
         self.ssecurity = unlock_data["ssecurity"]
         self.nonce = nonce
         
-        print(f"{cy}获取到的认证参数:{cres}")
-        print(f"  ssecurity: {self.ssecurity[:20]}...")
-        print(f"  nonce: {self.nonce}")
-        print(f"  location: {location_url[:50]}...")
         
         return self.complete_authentication(location_url, userId, passToken)
     
     def complete_authentication(self, location_url, userId, passToken):
-        print(f"{cy}完成认证流程...{cres}")
+        print(f"{cy}正在完成认证流程...{cres}")
         
         client_sign = urllib.parse.quote_plus(
             b64encode(
@@ -210,7 +205,7 @@ class XiaomiUnlockTool:
         }
         self.save_data(self.auth_info)
         
-        print(f"\n{cg}DONE！登录成功!{cres}")
+        print(f"\n{cg}DONE Login！登录成功!{cres}")
         print(f"{cg}账户信息:{cres}\nID: {userId}")
         return True
     
@@ -224,12 +219,12 @@ class XiaomiUnlockTool:
             print(f"{cr}十六进制转换失败: {e}{cres}")
             return None
     
-    def save_token_bin(self, encrypt_data):
+    def save_sig_bin(self, encrypt_data):
         try:
             hex_string = encrypt_data.strip()
             binary_data = bytes.fromhex(hex_string)
             script_dir = os.path.dirname(os.path.abspath(__file__))
-            token_file = os.path.join(script_dir, "fdl_token.bin")  # 改名以区分
+            token_file = os.path.join(script_dir, "fdl_sig.bin")  # 改名以区分
             with open(token_file, 'wb') as f:
                 f.write(binary_data)
             print(f"{cg}FDL数据已保存为: {token_file}{cres}")
@@ -397,7 +392,6 @@ class XiaomiUnlockTool:
                     post_data[k.decode('utf-8')] = v.decode('utf-8')
                 
                 url = f"https://{self.unlock_api.current_host}{self.path}"
-                print(f"{cy}发送请求到: {url}{cres}")
                 
                 response = self.unlock_api.session.post(
                     url, 
@@ -406,9 +400,7 @@ class XiaomiUnlockTool:
                     cookies=self.unlock_api.cookies,
                     timeout=30
                 )
-                
-                print(f"{cy}收到响应，状态码: {response.status_code}{cres}")
-                
+                                
                 if not response.text.strip():
                     return {"error": "服务器返回空响应"}
                 
@@ -431,8 +423,8 @@ class XiaomiUnlockTool:
                 return {"error": str(e)}
     
     def request_fdl(self, product, token):
-        """请求FDL授权（Fastboot to EDL）"""
-        print(f"\n{cy}请求FDL授权...{cres}")
+        print(f"\n{cy}开始加密请求...{cres}")
+        print(f"\n{cy}开始请求流程...{cres}")
         
         userId = self.auth_info.get("userid")
         pc_id = ''.join(random.choices('0123456789abcdef', k=32))
@@ -489,7 +481,6 @@ class XiaomiUnlockTool:
         print(f"{cb}项目                https://github.com/bgm145632/xiaomi_get_unlock-code{cres}")
         print(f"                                         {cres}")
         print(f"{cb}作者                          BEICHEN，bgm145632{cres}")
-        print(f"{cb}参考项目                       termux-miunlock{cres}")
         print(f"                                         {cres}")
         print(f"{cb}风破浪会有时 直挂云帆济沧海{cres}")
         print(f"{cg}{'='*70}{cres}")
@@ -519,10 +510,9 @@ class XiaomiUnlockTool:
             result = self.request_fdl(product, device_token)
             
             if not result:
-                print(f"{cr}FDL请求失败 - 无响应{cres}")
+                print(f"{cr}请求失败 - 无响应{cres}")
                 return
                 
-            print(f"\n{cy}服务器响应:{cres}")
             print(json.dumps(result, indent=2, ensure_ascii=False))
             
             if "code" in result and result["code"] == 0:
@@ -535,7 +525,7 @@ class XiaomiUnlockTool:
                     print(f"{cb}{'='*50}{cres}")
                     
                     print(f"{cy}正在生成fdl_token.bin文件...{cres}")
-                    if self.save_token_bin(encrypt_data):
+                    if self.save_sig_bin(encrypt_data):
                         print(f"{cg}文件生成成功!{cres}")
                     else:
                         print(f"{cr}文件生成失败{cres}")                            
