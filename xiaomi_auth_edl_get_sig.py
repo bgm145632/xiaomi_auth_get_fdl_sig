@@ -144,12 +144,12 @@ class XiaomiUnlockTool:
         try:
             unlock_data = json.loads(unlock_response.text.replace("&&&START&&&", ""))
         except:
-            print(f"{cr}解析解锁服务响应失败{cres}")
+            print(f"{cr}解析登录服务响应失败{cres}")
             return False
         
         if unlock_data.get("code") != 0:
             error_msg = unlock_data.get("desc", "未知错误")
-            print(f"{cr}解锁服务返回错误: {error_msg}{cres}")
+            print(f"{cr}登录服务返回错误: {error_msg}{cres}")
             return False
         
         if "ssecurity" not in unlock_data:
@@ -482,7 +482,7 @@ class XiaomiUnlockTool:
         print(f"                                         {cres}")
         print(f"{cb}作者                          BEICHEN，bgm145632{cres}")
         print(f"                                         {cres}")
-        print(f"{cb}风破浪会有时 直挂云帆济沧海{cres}")
+        print(f"{cb}长风破浪会有时 直挂云帆济沧海{cres}")
         print(f"{cg}{'='*70}{cres}")
         
         try:
