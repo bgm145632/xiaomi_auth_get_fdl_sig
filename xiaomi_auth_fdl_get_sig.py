@@ -147,7 +147,6 @@ class XiaomiFdlTool:
             print(f"{cr}解析解锁服务响应失败{cres}")
             return False
         
-        print(f"{cy}解锁服务响应: {cb}{json.dumps(unlock_data, indent=2, ensure_ascii=False)}{cres}")
         if unlock_data.get("code") != 0:
             error_msg = unlock_data.get("desc", "未知错误")
             print(f"{cr}解锁服务返回错误: {error_msg}{cres}")
@@ -173,10 +172,6 @@ class XiaomiFdlTool:
         self.ssecurity = unlock_data["ssecurity"]
         self.nonce = nonce
         
-        print(f"{cy}获取到的认证参数:{cres}")
-        print(f"  ssecurity: {self.ssecurity[:20]}...")
-        print(f"  nonce: {self.nonce}")
-        print(f"  location: {location_url[:50]}...")
         
         return self.complete_authentication(location_url, userId, passToken)
     
@@ -397,7 +392,7 @@ class XiaomiFdlTool:
                     post_data[k.decode('utf-8')] = v.decode('utf-8')
                 
                 url = f"https://{self.unlock_api.current_host}{self.path}"
-                print(f"{cy}发送请求到: {url}{cres}")
+                print(f"开始请求")
                 
                 response = self.unlock_api.session.post(
                     url, 
@@ -407,7 +402,6 @@ class XiaomiFdlTool:
                     timeout=30
                 )
                 
-                print(f"{cy}收到响应，状态码: {response.status_code}{cres}")
                 
                 if not response.text.strip():
                     return {"error": "服务器返回空响应"}
@@ -431,8 +425,8 @@ class XiaomiFdlTool:
                 return {"error": str(e)}
     
     def request_fdl(self, product, token):
-        """请求FDL授权（Fastboot to EDL）"""
         print(f"\n{cy}请求FDL授权...{cres}")
+        print(f"\n{cy}开始加密请求...{cres}")
         
         userId = self.auth_info.get("userid")
         pc_id = ''.join(random.choices('0123456789abcdef', k=32))
