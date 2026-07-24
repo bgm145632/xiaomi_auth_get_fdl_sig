@@ -18,6 +18,9 @@
 
 ps:感谢beichen帮我协助逆向官方售后工具，在我们逆向发现踢edl这个工作过程中，发现多了一套HMAC-SHA256额外的签名校验流程，如果没这套流程会提示参数异常（具体看472-481行）
 
+警告：公开项目如需使用标注二位作者名字！！！
+Warning: If you want to use this public project, you need to credit both authors!!!
+
 ## 作者:
 [BEICHEN](https://space.bilibili.com/9784369)
 
