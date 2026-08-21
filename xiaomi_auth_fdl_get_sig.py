@@ -429,7 +429,7 @@ class XiaomiFdlTool:
         print(f"\n{cy}开始加密请求...{cres}")
         
         userId = self.auth_info.get("userid")
-        pc_id = ''.join(random.choices('0123456789abcdef', k=32))
+        pc_id = "you pcid"  # Enter the computer ID of the computer where you can currently log in to your Xiaomi account here.
         
         request_data = {
             "clientId": "2",
