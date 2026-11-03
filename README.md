@@ -1,3 +1,4 @@
+<img width="1267" height="704" alt="898c15ba-9f7f-4be9-844f-ff3d75a5f5cf" src="https://github.com/user-attachments/assets/b1d00f1f-c279-43d6-86bf-cd894f8daf85" />
 <h1>使用教程:</h1>
 
 <h2>支持 Windows, Linux, MacOS :</h2>
